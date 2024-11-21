@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
-import { loginData } from "./sessionLib";
+import { loginData, loginFormData } from "./sessionLib";
 import { defaultSession, sessionOptions } from "./sessionLib";
 
 export async function getSession() {
@@ -24,7 +24,7 @@ export async function getSession() {
     return session;
 }
 
-export async function login(data: any) {
+export async function login(data: loginFormData) {
     const session = await getSession();
     
     const formDataObj = {

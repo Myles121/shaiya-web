@@ -1,6 +1,6 @@
 import { connectToDb, executeQuery } from "@app/_lib/db";
 
-export async function GET(request) {
+export async function GET() {
   try {
     await connectToDb("PS_GameData");
     await connectToDb("PS_UserData");

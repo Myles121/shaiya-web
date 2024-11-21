@@ -7,10 +7,6 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  NavbarMenuToggle,
-  NavbarMenu,
-  NavbarMenuItem,
-  Button,
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
@@ -22,10 +18,8 @@ import Link from "next/link";
 
 import { AcmeLogo } from "@public/Acmelogo";
 import { logout, getSession } from "@app/_lib/session";
-import { IronSession } from "iron-session";
 import LoginModal from "@app/(components)/LoginModal";
 import RegisterModal from "@app/(components)/RegisterModal";
-// import { loginData } from "@app/_lib/session";
 
 import { useRouter } from "next/navigation";
 
@@ -54,7 +48,7 @@ const NavigationBar = () => {
   }, []);
 
   const handlelogout = async () => {
-    await logout();
+    await logout(); 
     router.push("/")
   };
 

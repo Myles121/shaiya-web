@@ -16,7 +16,6 @@ import { signInSchema, SignInFormData } from "@/app/_lib/schema";
 import { useForm } from "react-hook-form";
 import { MailIcon } from "./MailIcon.jsx";
 import { LockIcon } from "./LockIcon.jsx";
-import { redirect } from "next/navigation";
 import { login } from "./actions";
 
 export default function Login() {

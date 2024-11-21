@@ -10,8 +10,6 @@ import {
   Button,
   useDisclosure,
   Input,
-  User,
-  AvatarIcon,
 } from "@nextui-org/react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -53,7 +51,7 @@ export default function Register() {
     setLoading(true);
 
     try {
-      const response = await fetch('/api/register', {
+      const response = await fetch("/api/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
