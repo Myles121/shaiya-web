@@ -9,7 +9,10 @@ export async function POST(req) {
     if (!username || !password) {
       return new Response(
         JSON.stringify({ field: "validation", message: "Username and password are required" }),
-        { status: 400 }
+        { status: 400 },
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
       );
     }
 
@@ -32,7 +35,10 @@ export async function POST(req) {
     if (!result || result.length === 0) {
       return new Response(
         JSON.stringify({ field: "username", message: "User doesn't exist." }),
-        { status: 401 }
+        { status: 401 },
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
       );
     }
 
@@ -43,19 +49,12 @@ export async function POST(req) {
     } else {
       return new Response(
         JSON.stringify({ field: "password", message: "Invalid password." }),
-        { status: 401 }
+        { status: 401 },
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
       );
     }
-
-    // Respond with success
-    return new Response(
-      JSON.stringify({
-        field: "success",
-        message: "Logged in successfully.",
-        user: { UserID: user.UserID },
-      }),
-      { status: 200 }
-    );
   } catch (err) {
     console.error("Error during login process:", err);
     return new Response(
@@ -63,7 +62,22 @@ export async function POST(req) {
         field: "error",
         error: "An unexpected error occurred. Please try again later.",
       }),
-      { status: 500 }
+      { status: 500 },
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
     );
   }
+}
+
+// CORS Preflight Handling
+export async function OPTIONS() {
+  return new Response(null, {
+    status: 204,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+    },
+  });
 }
