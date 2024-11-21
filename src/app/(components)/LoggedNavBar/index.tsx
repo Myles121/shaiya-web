@@ -47,7 +47,13 @@ const NavigationBar = () => {
   useEffect(() => {
     const fetchSession = async () => {
       const sessionData = await getSession();
-      setSession(sessionData);
+      setSession({
+        isLoggedIn: sessionData.isLoggedIn ?? false,
+        username: sessionData.username ?? null,
+        email: sessionData.email ?? null,
+        isAdmin: sessionData.isAdmin ?? false,
+        adminLevel: sessionData.adminLevel ?? null,
+      });
       setLoading(false);
     };
     fetchSession();
