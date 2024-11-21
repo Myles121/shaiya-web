@@ -21,11 +21,11 @@ import RegisterModal from "@app/(components)/RegisterModal";
 import { AcmeLogo } from "@public/Acmelogo";
 
 export interface User {
-  isLoggedIn: boolean;
-  UserID: string | null;
+  isLoggedIn: boolean | undefined;
+  UserID: string;
   Email: string | null;
   Admin: boolean;
-  AdminLevel: number | null;
+  AdminLevel: number;
 }
 
 const NavigationBar = () => {
