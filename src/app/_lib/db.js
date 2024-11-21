@@ -3,9 +3,14 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+if (!process.env.NEXT_PUBLIC_USER || !process.env.NEXT_PUBLIC_PASS || !process.env.NEXT_PUBLIC_SERVER) {
+  throw new Error("Missing required environment variables");
+}
+
 const userDB = process.env.NEXT_PUBLIC_USER;
 const password = process.env.NEXT_PUBLIC_PASS;
 const server = process.env.NEXT_PUBLIC_SERVER;
+
 
 // Configuration for your MSSQL server
 const baseConfig = {
@@ -31,12 +36,14 @@ export async function connectToDb(database) {
   }
 }
 
-export async function executeQuery(query) {
+export async function executeQuery(query, params = []) {
   try {
-    const result = await sql.query(query);
+    const request = new sql.Request();
+    params.forEach((param) => request.input(param.name, param.type, param.value));
+    const result = await request.query(query);
     return result.recordset;
   } catch (err) {
     console.error("Query execution failed:", err);
-    throw err;
+    throw new Error("Database query failed");
   }
 }

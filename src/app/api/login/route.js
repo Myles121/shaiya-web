@@ -1,45 +1,69 @@
-// app/api/register/route.js
 import { connectToDb, executeQuery } from "@app/_lib/db";
+import sql from "mssql"; // Ensure you have mssql library installed
 
 export async function POST(req) {
   const { username, password } = await req.json();
 
   try {
+    // Validate input
+    if (!username || !password) {
+      return new Response(
+        JSON.stringify({ field: "validation", message: "Username and password are required" }),
+        { status: 400 }
+      );
+    }
+
     // Connect to the database
     await connectToDb("PS_UserData");
 
-    // Query to check if the user exists and password matches
+    // Fetch the user by username
     const query = `
-        SELECT * FROM PS_UserData.dbo.Users_Master WHERE UserID = '${username}' AND Pw = '${password}'
-      `;
-    const result = await executeQuery(query);
+      SELECT * FROM PS_UserData.dbo.Users_Master 
+      WHERE UserID = @username
+    `;
 
-    // Handle invalid username or password
+    const params = [
+      { name: "username", type: sql.NVarChar, value: username },
+    ];
+
+    const result = await executeQuery(query, params);
+
+    // Handle user not found
     if (!result || result.length === 0) {
-      return new Response(JSON.stringify({ field: "username", message: "Invalid username or password" }), {
-        status: 401,
-      });
+      return new Response(
+        JSON.stringify({ field: "username", message: "User doesn't exist." }),
+        { status: 401 }
+      );
     }
 
     const user = result[0];
 
-    // Send response to the client
+    if (password === user.Pw) {
+      return new Response(JSON.stringify({ field: "success", message: "logged", user: user}))
+    } else {
+      return new Response(
+        JSON.stringify({ field: "password", message: "Invalid password." }),
+        { status: 401 }
+      );
+    }
+
+    // Respond with success
     return new Response(
       JSON.stringify({
         field: "success",
         message: "Logged in successfully.",
-        user: user
+        user: { UserID: user.UserID },
       }),
-      {
-        status: 200,
-      }
+      { status: 200 }
     );
   } catch (err) {
+    console.error("Error during login process:", err);
     return new Response(
-      JSON.stringify({ field: "error", error: "Failed to fetch data.", details: err.message }),
-      {
-        status: 500,
-      }
+      JSON.stringify({
+        field: "error",
+        error: "An unexpected error occurred. Please try again later.",
+      }),
+      { status: 500 }
     );
   }
-};
+}

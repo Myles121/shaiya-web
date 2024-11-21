@@ -58,6 +58,10 @@ const LoginModal: React.FC<LoginModalProps> = ({ onLoginSuccess }) => {
       // Assuming `res.user` contains the user data
       const user: User = res.user; // Ensure that the response matches the `User` type
       onLoginSuccess(user); // Pass the user data to the parent component
+    } else if (res.field === "username") {
+      setResponseData(res.message);
+    } else if (res.field === "password") {
+      setResponseData(res.message);
     } else {
       setResponseData(res.message || "An error occurred");
       setTimeout(() => {

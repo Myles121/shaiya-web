@@ -29,7 +29,7 @@ export async function login(data: loginFormData) {
 
   if (res.field === "success") {
     session.isLoggedIn = true;
-    session.user_id = res.user.UserUID;
+    session.user_id = res.user.UserUD;
     session.username = res.user.UserID;
     session.email = res.user.Email;
     session.isAdmin = res.user.Admin;
