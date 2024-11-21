@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   Navbar,
   NavbarBrand,
@@ -13,20 +15,23 @@ import {
   DropdownItem,
   Skeleton,
 } from "@nextui-org/react";
-
-import Link from "next/link";
-
-import { AcmeLogo } from "@public/Acmelogo";
 import { logout, getSession } from "@app/_lib/session";
 import LoginModal from "@app/(components)/LoginModal";
 import RegisterModal from "@app/(components)/RegisterModal";
+import { AcmeLogo } from "@public/Acmelogo";
 
-import { useRouter } from "next/navigation";
+export interface User {
+  isLoggedIn: boolean;
+  UserID: string | null;
+  Email: string | null;
+  Admin: boolean;
+  AdminLevel: number | null;
+}
 
 const NavigationBar = () => {
   // const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const pathname = usePathname();
-  const router = useRouter(); 
+  const router = useRouter();
 
   const [session, setSession] = useState<{
     isLoggedIn: boolean;
@@ -48,13 +53,13 @@ const NavigationBar = () => {
   }, []);
 
   const handlelogout = async () => {
-    await logout(); 
-    setSession(null)
-    router.push("/")
+    await logout();
+    setSession(null);
+    router.push("/");
   };
 
   // Define the onLoginSuccess function here
-  const handleLoginSuccess = (user: any) => {
+  const handleLoginSuccess = (user: User) => {
     // Update session state after successful login
     setSession({
       isLoggedIn: true,
@@ -108,7 +113,7 @@ const NavigationBar = () => {
         ) : !session?.isLoggedIn ? (
           <>
             <NavbarItem className="hidden lg:flex">
-              <LoginModal onLoginSuccess={handleLoginSuccess}/>
+              <LoginModal onLoginSuccess={handleLoginSuccess} />
             </NavbarItem>
             <NavbarItem>
               <RegisterModal />

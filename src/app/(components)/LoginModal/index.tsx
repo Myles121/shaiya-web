@@ -17,9 +17,10 @@ import { useForm } from "react-hook-form";
 import { MailIcon } from "./MailIcon.jsx";
 import { LockIcon } from "./LockIcon.jsx";
 import { login } from "./actions";
+import { User } from "@app/(components)/LoggedNavBar";
 
 interface LoginModalProps {
-  onLoginSuccess: (user: any) => void; // Define the callback type
+  onLoginSuccess: (user: User) => void; // Define the callback type
 }
 
 const LoginModal: React.FC<LoginModalProps> = ({ onLoginSuccess }) => {
@@ -27,7 +28,13 @@ const LoginModal: React.FC<LoginModalProps> = ({ onLoginSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [responseData, setResponseData] = useState<string | null>(null);
 
-  const { register, handleSubmit, formState: { errors }, reset, setError } = useForm<SignInFormData>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    setError,
+  } = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
   });
 
@@ -48,9 +55,9 @@ const LoginModal: React.FC<LoginModalProps> = ({ onLoginSuccess }) => {
       await login(data);
       onOpenChange();
       reset();
-
-      // Notify the parent component (Navbar) of the successful login
-      onLoginSuccess(res.user); // This updates the session in the parent
+      // Assuming `res.user` contains the user data
+      const user: User = res.user; // Ensure that the response matches the `User` type
+      onLoginSuccess(user); // Pass the user data to the parent component
     } else {
       setResponseData(res.message || "An error occurred");
       setTimeout(() => {
