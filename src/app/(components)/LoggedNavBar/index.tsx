@@ -36,6 +36,7 @@ const NavigationBar = () => {
 
   const [session, setSession] = useState<{
     isLoggedIn: boolean;
+    user_id: string | null;
     username: string | null;
     email: string | null;
     isAdmin: boolean;
@@ -49,6 +50,7 @@ const NavigationBar = () => {
       const sessionData = await getSession();
       setSession({
         isLoggedIn: sessionData.isLoggedIn ?? false,
+        user_id: sessionData.user_id ?? null,
         username: sessionData.username ?? null,
         email: sessionData.email ?? null,
         isAdmin: sessionData.isAdmin ?? false,
@@ -70,7 +72,7 @@ const NavigationBar = () => {
     // Update session state after successful login
     setSession({
       isLoggedIn: true,
-      user_id: user.UserIUD,
+      user_id: user.user_id,
       username: user.UserID,
       email: user.Email,
       isAdmin: user.Admin,
