@@ -22,7 +22,6 @@ import mapCodes from "./mapCodes";
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 export default function Rankings() {
-  
   const { data, error } = useSWR(`/api/rankings`, fetcher);
 
   const [value, setValue] = React.useState(0);
@@ -173,22 +172,93 @@ export default function Rankings() {
         removeWrapper
       >
         <TableHeader>
-          <TableColumn align="center" width={1}>#</TableColumn>
+          <TableColumn align="center" width={1}>
+            #
+          </TableColumn>
           <TableColumn align="start">Name</TableColumn>
-          <TableColumn width={80} maxWidth={150} align="center">Kills</TableColumn>
-          <TableColumn width={1} align="center">Level</TableColumn>
+          <TableColumn width={80} maxWidth={150} align="center">
+            Kills
+          </TableColumn>
+          <TableColumn width={1} align="center">
+            Level
+          </TableColumn>
           <TableColumn>Guild</TableColumn>
         </TableHeader>
         <TableBody>
-          {currentPageData.map((item, index) => (
-            <TableRow key={item.ID}>
-              <TableCell>{(page - 1) * rowsPerPage + index + 4}</TableCell>
-              <TableCell>{item.Name}</TableCell>
-              <TableCell>{item.Kills.toLocaleString()}</TableCell>
-              <TableCell>{item.Level}</TableCell>
-              <TableCell>{item.GuildName}</TableCell>
-            </TableRow>
-          ))}
+          {currentPageData.map(
+            (
+              item: {
+                ID: React.Key | null | undefined;
+                Name:
+                  | string
+                  | number
+                  | bigint
+                  | boolean
+                  | React.ReactElement<
+                      any,
+                      string | React.JSXElementConstructor<any>
+                    >
+                  | Iterable<React.ReactNode>
+                  | React.ReactPortal
+                  | Promise<React.AwaitedReactNode>
+                  | null
+                  | undefined;
+                Kills: {
+                  toLocaleString: () =>
+                    | string
+                    | number
+                    | bigint
+                    | boolean
+                    | React.ReactElement<
+                        any,
+                        string | React.JSXElementConstructor<any>
+                      >
+                    | Iterable<React.ReactNode>
+                    | React.ReactPortal
+                    | Promise<React.AwaitedReactNode>
+                    | null
+                    | undefined;
+                };
+                Level:
+                  | string
+                  | number
+                  | bigint
+                  | boolean
+                  | React.ReactElement<
+                      any,
+                      string | React.JSXElementConstructor<any>
+                    >
+                  | Iterable<React.ReactNode>
+                  | React.ReactPortal
+                  | Promise<React.AwaitedReactNode>
+                  | null
+                  | undefined;
+                GuildName:
+                  | string
+                  | number
+                  | bigint
+                  | boolean
+                  | React.ReactElement<
+                      any,
+                      string | React.JSXElementConstructor<any>
+                    >
+                  | Iterable<React.ReactNode>
+                  | React.ReactPortal
+                  | Promise<React.AwaitedReactNode>
+                  | null
+                  | undefined;
+              },
+              index: number
+            ) => (
+              <TableRow key={item.ID}>
+                <TableCell>{(page - 1) * rowsPerPage + index + 4}</TableCell>
+                <TableCell>{item.Name}</TableCell>
+                <TableCell>{item.Kills.toLocaleString()}</TableCell>
+                <TableCell>{item.Level}</TableCell>
+                <TableCell>{item.GuildName}</TableCell>
+              </TableRow>
+            )
+          )}
         </TableBody>
       </Table>
     </div>
