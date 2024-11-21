@@ -8,11 +8,16 @@ export async function POST(req) {
     // Validate input
     if (!username || !password) {
       return new Response(
-        JSON.stringify({ field: "validation", message: "Username and password are required" }),
-        { status: 400 },
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        },
+        JSON.stringify({
+          field: "validation",
+          message: "Username and password are required",
+        }),
+        {
+          status: 400,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
       );
     }
 
@@ -25,9 +30,7 @@ export async function POST(req) {
       WHERE UserID = @username
     `;
 
-    const params = [
-      { name: "username", type: sql.NVarChar, value: username },
-    ];
+    const params = [{ name: "username", type: sql.NVarChar, value: username }];
 
     const result = await executeQuery(query, params);
 
@@ -35,24 +38,30 @@ export async function POST(req) {
     if (!result || result.length === 0) {
       return new Response(
         JSON.stringify({ field: "username", message: "User doesn't exist." }),
-        { status: 401 },
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        },
+        {
+          status: 401,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
       );
     }
 
     const user = result[0];
 
     if (password === user.Pw) {
-      return new Response(JSON.stringify({ field: "success", message: "logged", user: user}))
+      return new Response(
+        JSON.stringify({ field: "success", message: "logged", user: user })
+      );
     } else {
       return new Response(
         JSON.stringify({ field: "password", message: "Invalid password." }),
-        { status: 401 },
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        },
+        {
+          status: 401,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
       );
     }
   } catch (err) {
@@ -62,10 +71,12 @@ export async function POST(req) {
         field: "error",
         error: "An unexpected error occurred. Please try again later.",
       }),
-      { status: 500 },
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
+      {
+        status: 500,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
     );
   }
 }
