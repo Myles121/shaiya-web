@@ -22,7 +22,7 @@ import mapCodes from "./mapCodes";
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 type PlayerData = {
-  ID: string | number;
+  ID: string;
   Name: string;
   Kills: number;
   Level: number;
@@ -61,7 +61,7 @@ const LoadingScreen = ({ value }: { value: number }) => (
 );
 
 const RankingCards = ({ data }: RankingCardProps) => {
-  const [firstRow, secondRow, thirdRow, ...restOfData] = data;
+  const [firstRow, secondRow, thirdRow] = data;
 
   return (
     <div className="flex justify-center p-5 items-end">
@@ -182,67 +182,7 @@ const RankingsTable = ({
     <TableBody>
       {currentPageData.map(
         (
-          item: {
-            ID: React.Key | null | undefined;
-            Name:
-              | string
-              | number
-              | bigint
-              | boolean
-              | React.ReactElement<
-                  any,
-                  string | React.JSXElementConstructor<any>
-                >
-              | Iterable<React.ReactNode>
-              | React.ReactPortal
-              | Promise<React.AwaitedReactNode>
-              | null
-              | undefined;
-            Kills: {
-              toLocaleString: () =>
-                | string
-                | number
-                | bigint
-                | boolean
-                | React.ReactElement<
-                    any,
-                    string | React.JSXElementConstructor<any>
-                  >
-                | Iterable<React.ReactNode>
-                | React.ReactPortal
-                | Promise<React.AwaitedReactNode>
-                | null
-                | undefined;
-            };
-            Level:
-              | string
-              | number
-              | bigint
-              | boolean
-              | React.ReactElement<
-                  any,
-                  string | React.JSXElementConstructor<any>
-                >
-              | Iterable<React.ReactNode>
-              | React.ReactPortal
-              | Promise<React.AwaitedReactNode>
-              | null
-              | undefined;
-            GuildName:
-              | string
-              | number
-              | bigint
-              | boolean
-              | React.ReactElement<
-                  any,
-                  string | React.JSXElementConstructor<any>
-                >
-              | Iterable<React.ReactNode>
-              | React.ReactPortal
-              | Promise<React.AwaitedReactNode>
-              | null
-              | undefined;
-          },
+          item: PlayerData, // Correctly type the item here
           index: number
         ) => (
           <TableRow key={item.ID}>
