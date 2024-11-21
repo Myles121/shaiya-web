@@ -21,7 +21,8 @@ import RegisterModal from "@app/(components)/RegisterModal";
 import { AcmeLogo } from "@public/Acmelogo";
 
 export interface User {
-  isLoggedIn: boolean | undefined;
+  isLoggedIn: boolean;
+  user_id: string;
   UserID: string;
   Email: string | null;
   Admin: boolean;
@@ -63,6 +64,7 @@ const NavigationBar = () => {
     // Update session state after successful login
     setSession({
       isLoggedIn: true,
+      user_id: user.UserIUD,
       username: user.UserID,
       email: user.Email,
       isAdmin: user.Admin,
