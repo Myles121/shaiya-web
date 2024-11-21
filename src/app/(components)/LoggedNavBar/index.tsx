@@ -53,6 +53,18 @@ const NavigationBar = () => {
     router.push("/")
   };
 
+  // Define the onLoginSuccess function here
+  const handleLoginSuccess = (user: any) => {
+    // Update session state after successful login
+    setSession({
+      isLoggedIn: true,
+      username: user.UserID,
+      email: user.Email,
+      isAdmin: user.Admin,
+      adminLevel: user.AdminLevel,
+    });
+  };
+
   const menuItems = [
     { label: "Home", href: "/home" },
     { label: "Rankings", href: "/rankings" },
@@ -96,7 +108,7 @@ const NavigationBar = () => {
         ) : !session?.isLoggedIn ? (
           <>
             <NavbarItem className="hidden lg:flex">
-              <LoginModal />
+              <LoginModal onLoginSuccess={handleLoginSuccess}/>
             </NavbarItem>
             <NavbarItem>
               <RegisterModal />

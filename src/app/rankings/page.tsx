@@ -173,10 +173,10 @@ export default function Rankings() {
         removeWrapper
       >
         <TableHeader>
-          <TableColumn>#</TableColumn>
-          <TableColumn>Name</TableColumn>
-          <TableColumn>Kills</TableColumn>
-          <TableColumn>Level</TableColumn>
+          <TableColumn align="center" width={1}>#</TableColumn>
+          <TableColumn align="start">Name</TableColumn>
+          <TableColumn width={80} maxWidth={150} align="center">Kills</TableColumn>
+          <TableColumn width={1} align="center">Level</TableColumn>
           <TableColumn>Guild</TableColumn>
         </TableHeader>
         <TableBody>

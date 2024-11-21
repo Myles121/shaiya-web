@@ -18,24 +18,21 @@ import { MailIcon } from "./MailIcon.jsx";
 import { LockIcon } from "./LockIcon.jsx";
 import { login } from "./actions";
 
-export default function Login() {
+interface LoginModalProps {
+  onLoginSuccess: (user: any) => void; // Define the callback type
+}
+
+const LoginModal: React.FC<LoginModalProps> = ({ onLoginSuccess }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [loading, setLoading] = useState(false);
   const [responseData, setResponseData] = useState<string | null>(null);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    setError,
-  } = useForm<SignInFormData>({
+  const { register, handleSubmit, formState: { errors }, reset, setError } = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
   });
 
   const onSubmit = async (data: SignInFormData) => {
     setLoading(true);
-    // const res = await login(data);
     const response = await fetch("http://localhost:3000/api/login", {
       method: "POST",
       headers: {
@@ -44,20 +41,24 @@ export default function Login() {
       body: JSON.stringify(data),
       credentials: "include",
     });
-    await login(data)
 
     const res = await response.json();
+
     if (res.field === "success") {
+      await login(data);
       onOpenChange();
       reset();
-    }
-    else {
+
+      // Notify the parent component (Navbar) of the successful login
+      onLoginSuccess(res.user); // This updates the session in the parent
+    } else {
       setResponseData(res.message || "An error occurred");
       setTimeout(() => {
         setResponseData(null);
       }, 3000);
       setLoading(false);
     }
+
     if (res.field === "username") {
       setError("username", {
         type: "server",
@@ -66,7 +67,8 @@ export default function Login() {
     } else {
       console.error(res.message || "An error occurred.");
     }
-    setLoading(false)
+
+    setLoading(false);
   };
 
   return (
@@ -127,4 +129,6 @@ export default function Login() {
       </Modal>
     </>
   );
-}
+};
+
+export default LoginModal;
