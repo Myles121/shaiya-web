@@ -44,10 +44,10 @@ export default function Login() {
       body: JSON.stringify(data),
       credentials: "include",
     });
+    await login(data)
 
     const res = await response.json();
     if (res.field === "success") {
-      await login(data)
       onOpenChange();
       reset();
     }

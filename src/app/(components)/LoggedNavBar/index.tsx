@@ -24,7 +24,7 @@ import RegisterModal from "@app/(components)/RegisterModal";
 import { useRouter } from "next/navigation";
 
 const NavigationBar = () => {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  // const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const pathname = usePathname();
   const router = useRouter(); 
 
@@ -49,6 +49,7 @@ const NavigationBar = () => {
 
   const handlelogout = async () => {
     await logout(); 
+    setSession(null)
     router.push("/")
   };
 
