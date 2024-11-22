@@ -96,7 +96,7 @@ export default function Register() {
       <Button onPress={onOpen} color="primary" variant="flat">
         Register
       </Button>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="center">
         <ModalContent>
           {(onClose) => (
             <>

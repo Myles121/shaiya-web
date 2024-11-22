@@ -18,6 +18,10 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "Shaiya M",
   description: "Join Shaiya M today!",
+  icons: {
+    icon: "./favicon.ico",
+    apple: "./favicon.ico",
+  }
 };
 
 export default function RootLayout({

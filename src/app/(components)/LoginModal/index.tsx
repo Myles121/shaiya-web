@@ -97,7 +97,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onLoginSuccess }) => {
       <Modal
         isOpen={isOpen}
         onOpenChange={handleModalClose}
-        placement="top-center"
+        placement="center"
       >
         <ModalContent>
           {(onClose) => (

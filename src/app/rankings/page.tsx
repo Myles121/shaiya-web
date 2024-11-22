@@ -95,19 +95,28 @@ const RankingCards = ({ data }: RankingCardProps) => {
                   src="https://nextui.org/images/hero-card.jpeg" // Replace with actual player image URL if available
                 />
                 <CardHeader className="absolute top-0 py-5 px-5 z-10 flex justify-between items-center w-full">
-                  {/* Online Status Circle */}
-                  <div className="flex items-center gap-2">
-                    <div
-                      className={`w-3 h-3 rounded-full ${
-                        item.LoginStatus === 1 ? "bg-green-500" : "bg-red-500"
-                      }`}
-                    ></div>
-                    {/* Name and Level */}
+                  <div className="flex flex-col items-start rounded-md">
                     <div className="flex gap-2 items-center">
+                      {/* Online Status Circle */}
+                      <div
+                        className={`w-3 h-3 rounded-full ${
+                          item.LoginStatus === 1 ? "bg-green-500" : "bg-red-500"
+                        }`}
+                      ></div>
                       <h4 className="text-2xl font-semibold text-white drop-shadow-md">
                         {item.Name}
                       </h4>
-                      <p className="text-sm text-gray-200">{`Level ${item.Level}`}</p>
+                      <div className="flex gap-2 items-center relative text-xs">
+                        <p className="text-xs text-blue-500 flex items-baseline absolute -top-4">
+                          <span>Level</span>
+                          <span className="text-sm ml-1 leading-none -mt-1">
+                            {item.Level}
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                    <div className="ml-5 text-orange-300 text-xs">
+                      {item.GuildName ? `${item.GuildName}` : ""}
                     </div>
                   </div>
                   {/* Top Ranking Label */}
@@ -118,7 +127,7 @@ const RankingCards = ({ data }: RankingCardProps) => {
               </div>
 
               {/* Card Footer with similar style */}
-              <CardFooter className="flex flex-col p-4 absolute bottom-0 bg-gradient-to-t from-slate-900 via-slate-800 to-slate-500/60 backdrop-blur-md rounded-b-xl z-10 shadow-md transform transition-all duration-300 ease-in-out hover:scale-105">
+              <CardFooter className="flex flex-col p-4 absolute bottom-0 bg-gradient-to-t from-slate-900 via-slate-800 to-slate-500/60 backdrop-blur-md rounded-b-xl z-10 shadow-md">
                 <div className="flex justify-between items-center w-full">
                   <div className="flex items-center gap-3">
                     {/* Kill Badge and Kill Count */}
@@ -134,7 +143,6 @@ const RankingCards = ({ data }: RankingCardProps) => {
                   <div className="flex">
                     {/* Map and Guild Name */}
                     <p className="text-xs text-white/70">
-                      {item.GuildName ? `${item.GuildName} - ` : ""}
                       {mapCodes[Number(item.Map)] || "Unknown Map"}
                     </p>
                   </div>

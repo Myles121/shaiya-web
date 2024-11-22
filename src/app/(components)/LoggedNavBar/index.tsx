@@ -9,6 +9,9 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
+  NavbarMenu,
+  NavbarMenuItem,
+  NavbarMenuToggle,
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
@@ -30,7 +33,7 @@ export interface User {
 }
 
 const NavigationBar = () => {
-  // const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const pathname = usePathname();
   const router = useRouter();
 
@@ -67,9 +70,7 @@ const NavigationBar = () => {
     router.push("/");
   };
 
-  // Define the onLoginSuccess function here
   const handleLoginSuccess = (user: User) => {
-    // Update session state after successful login
     setSession({
       isLoggedIn: true,
       user_id: user.user_id,
@@ -80,24 +81,18 @@ const NavigationBar = () => {
     });
   };
 
-  const menuItems = [
-    { label: "Home", href: "/home" },
-    { label: "Rankings", href: "/rankings" },
-    { label: "Drop List", href: "/drop-list" },
-    { label: "Download", href: "/download" },
-    { label: "Login", href: "/login" },
-    { label: "Register", href: "/register" },
-  ];
-
-  const isActive = (href: string) => pathname === href;
-
   return (
     <Navbar
-      // onMenuOpenChange={setIsMenuOpen}
+      onMenuOpenChange={setIsMenuOpen}
       maxWidth="full"
       className="bg-gray-400/40"
     >
       <NavbarContent>
+        <NavbarMenuToggle
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          className="sm:hidden"
+        />
+
         <NavbarBrand>
           <AcmeLogo />
           <p className="font-bold text-inherit text-md">SHAIYA M</p>
@@ -105,72 +100,136 @@ const NavigationBar = () => {
       </NavbarContent>
 
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        {menuItems.slice(0, 4).map((item) => (
-          <NavbarItem key={item.label} isActive={isActive(item.href)}>
-            <Link
-              href={item.href}
-              color={isActive(item.href) ? "primary" : "foreground"}
-            >
-              {item.label}
-            </Link>
-          </NavbarItem>
-        ))}
+        <DesktopMenu pathname={pathname} />
       </NavbarContent>
 
       <NavbarContent justify="end">
-        {loading ? ( // Show nothing or a skeleton loader while loading
-          <Skeleton className="flex rounded-md w-10 h-10 bg-gray-400" />
-        ) : !session?.isLoggedIn ? (
-          <>
-            <NavbarItem className="hidden lg:flex">
-              <LoginModal onLoginSuccess={handleLoginSuccess} />
-            </NavbarItem>
-            <NavbarItem>
-              <RegisterModal />
-            </NavbarItem>
-          </>
-        ) : (
-          <Dropdown placement="bottom-start">
-            <DropdownTrigger>
-              <div className="flex items-center justify-center cursor-pointer w-10 h-10 bg-gradient-to-br from-purple-500 via-pink-500 to-red-500 text-white text-lg font-bold rounded-md shadow-lg hover:scale-110 transition-transform duration-300">
-                {session?.email?.charAt(0).toUpperCase()}
-              </div>
-            </DropdownTrigger>
-            <DropdownMenu aria-label="User Actions" variant="flat">
-              <DropdownItem key="profile" className="h-14 gap-2">
-                <p className="font-bold">Signed in as</p>
-                <p className="font-bold">@{session?.email}</p>
-              </DropdownItem>
-              <DropdownItem key="settings">Account Settings</DropdownItem>
-              <DropdownItem onPress={handlelogout} color="danger">
-                Log Out
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
-        )}
+        <UserSection
+          loading={loading}
+          session={session}
+          handleLoginSuccess={handleLoginSuccess}
+          handlelogout={handlelogout}
+        />
       </NavbarContent>
 
-      {/* <NavbarMenu>
-        {menuItems.map((item, index) => (
-          <NavbarMenuItem key={`${item}-${index}`}>
-            <Link
-              color={
-                index === 2
-                  ? "primary"
-                  : index === menuItems.length - 1
-                  ? "danger"
-                  : "foreground"
-              }
-              className="w-full"
-              href={item.href}
-              size="lg"
-            >
-              {item.label}
-            </Link>
-          </NavbarMenuItem>
-        ))}
-      </NavbarMenu> */}
+      <NavbarMenu>
+        <MobileMenu setIsMenuOpen={function (value: React.SetStateAction<boolean>): void {
+          throw new Error("Function not implemented.");
+        } } />
+      </NavbarMenu>
     </Navbar>
+  );
+};
+
+const DesktopMenu = ({ pathname }: { pathname: string }) => {
+  const menuItems = [
+    { label: "Home", href: "/home" },
+    { label: "Rankings", href: "/rankings" },
+    { label: "Drop List", href: "/drop-list" },
+    { label: "Download", href: "/download" },
+  ];
+
+  const isActive = (href: string) => pathname === href;
+
+  return (
+    <>
+      {menuItems.map((item) => (
+        <NavbarItem key={item.label} isActive={isActive(item.href)}>
+          <Link
+            href={item.href}
+            color={isActive(item.href) ? "primary" : "foreground"}
+          >
+            {item.label}
+          </Link>
+        </NavbarItem>
+      ))}
+    </>
+  );
+};
+
+const MobileMenu = ({
+  setIsMenuOpen,
+}: {
+  setIsMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
+  const mobileMenuItems = [
+    { label: "Home", href: "/home" },
+    { label: "Rankings", href: "/rankings" },
+    { label: "Drop List", href: "/drop-list" },
+    { label: "Download", href: "/download" },
+  ];
+
+  return (
+    <>
+      {mobileMenuItems.map((item, index) => (
+        <NavbarMenuItem key={`${item}-${index}`}>
+          <Link
+            color={
+              index === 2
+                ? "primary"
+                : index === mobileMenuItems.length - 1
+                ? "danger"
+                : "foreground"
+            }
+            className="w-full"
+            href={item.href}
+            onClick={() => setIsMenuOpen(false)}
+          >
+            {item.label}
+          </Link>
+        </NavbarMenuItem>
+      ))}
+    </>
+  );
+};
+
+const UserSection = ({
+  loading,
+  session,
+  handleLoginSuccess,
+  handlelogout,
+}: {
+  loading: boolean;
+  session: {
+    isLoggedIn: boolean;
+    user_id: string | null;
+    username: string | null;
+    email: string | null;
+    isAdmin: boolean;
+    adminLevel: number | null;
+  } | null;
+  handleLoginSuccess: (user: User) => void;
+  handlelogout: () => void;
+}) => {
+  return loading ? (
+    <Skeleton className="flex rounded-md w-10 h-10 bg-gray-400" />
+  ) : !session?.isLoggedIn ? (
+    <>
+      <NavbarItem className="">
+        <LoginModal onLoginSuccess={handleLoginSuccess} />
+      </NavbarItem>
+      <NavbarItem>
+        <RegisterModal />
+      </NavbarItem>
+    </>
+  ) : (
+    <Dropdown placement="bottom-start">
+      <DropdownTrigger>
+        <div className="flex items-center justify-center cursor-pointer w-10 h-10 bg-gradient-to-br from-purple-500 via-pink-500 to-red-500 text-white text-lg font-bold rounded-md shadow-lg hover:scale-110 transition-transform duration-300">
+          {session?.email?.charAt(0).toUpperCase()}
+        </div>
+      </DropdownTrigger>
+      <DropdownMenu aria-label="User Actions" variant="flat">
+        <DropdownItem key="profile" className="h-14 gap-2">
+          <p className="font-bold">Signed in as</p>
+          <p className="font-bold">@{session?.email}</p>
+        </DropdownItem>
+        <DropdownItem key="settings">Account Settings</DropdownItem>
+        <DropdownItem onPress={handlelogout} color="danger">
+          Log Out
+        </DropdownItem>
+      </DropdownMenu>
+    </Dropdown>
   );
 };
 
