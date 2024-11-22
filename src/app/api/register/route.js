@@ -23,7 +23,10 @@ export async function POST(req) {
 
     if (userExists.length > 0) {
       return new Response(
-        JSON.stringify({ field: "username", message: "Username already exists." }),
+        JSON.stringify({
+          field: "username",
+          message: "Username already exists.",
+        }),
         { status: 400 }
       );
     }
@@ -59,7 +62,10 @@ export async function POST(req) {
     ]);
 
     return new Response(
-      JSON.stringify({ field: "success", message: "User registered successfully!" }),
+      JSON.stringify({
+        field: "success",
+        message: "User registered successfully!",
+      }),
       { status: 201 }
     );
   } catch (err) {
