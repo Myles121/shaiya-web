@@ -18,6 +18,7 @@ import {
 import axios from "axios";
 import useSWR from "swr";
 import mapCodes from "./mapCodes";
+import { getImageBasedOnKills } from "./getIconKills";
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
@@ -74,20 +75,22 @@ const RankingCards = ({ data }: RankingCardProps) => {
           <div
             key={index}
             className={`${
-              index === 1 ? "-mt-7" : "" /* Apply margin-top to the middle card */
+              index === 1
+                ? "-mt-7"
+                : "" /* Apply margin-top to the middle card */
             } hover:scale-105 transform transition-all duration-300`}
           >
             <Card
               isFooterBlurred
               radius="lg"
-              className="border-none bg-slate-600"
+              className="border-none bg-slate-600 hover:shadow-2xl transition-shadow duration-300 ease-in-out"
               fullWidth
             >
               {/* Card Header styled like the footer and overlaid on the image */}
               <div className="relative">
                 <Image
                   alt="Player Avatar"
-                  className="object-cover rounded-t-lg"
+                  className="object-cover rounded-t-lg transition-transform duration-500 ease-in-out hover:scale-105"
                   height={400}
                   src="https://nextui.org/images/hero-card.jpeg" // Replace with actual player image URL if available
                 />
@@ -101,32 +104,38 @@ const RankingCards = ({ data }: RankingCardProps) => {
                     ></div>
                     {/* Name and Level */}
                     <div className="flex gap-2 items-center">
-                      <h4 className="text-xl font-bold text-white">
+                      <h4 className="text-2xl font-semibold text-white drop-shadow-md">
                         {item.Name}
                       </h4>
-                      <p className="text-tiny text-gray-200">{`Level ${item.Level}`}</p>
+                      <p className="text-sm text-gray-200">{`Level ${item.Level}`}</p>
                     </div>
                   </div>
                   {/* Top Ranking Label */}
-                  <div className="absolute top-2 right-2 bg-black/60 text-white text-md px-3 py-1 rounded-lg">
+                  <div className="absolute top-2 right-2 bg-black/60 text-white text-md px-4 py-2 rounded-lg shadow-lg">
                     {index === 0 ? "Top 2" : index === 1 ? "Top 1" : "Top 3"}
                   </div>
                 </CardHeader>
               </div>
 
               {/* Card Footer with similar style */}
-              <CardFooter className="flex overflow-hidden py-2 absolute before:rounded-xl bottom-0 bg-slate-500/60 z-10">
-                <div className="flex justify-between w-full">
-                  <div className="flex flex-col">
-                    {/* Map name */}
-                    <p className="text-tiny text-white/80">
-                      {mapCodes[Number(item.Map)] || "Unknown Map"}
-                    </p>
-                    <p className="text-tiny text-white/80">
-                      {item.GuildName || ""}
-                    </p>
-                    <p className="text-tiny text-white/80">
+              <CardFooter className="flex flex-col p-4 absolute bottom-0 bg-gradient-to-t from-slate-900 via-slate-800 to-slate-500/60 backdrop-blur-md rounded-b-xl z-10 shadow-md transform transition-all duration-300 ease-in-out hover:scale-105">
+                <div className="flex justify-between items-center w-full">
+                  <div className="flex items-center gap-3">
+                    {/* Kill Badge and Kill Count */}
+                    <img
+                      src={getImageBasedOnKills(item.Kills)}
+                      alt="Kill Badge"
+                      className="h-8 w-8 object-contain transform transition-all duration-300 ease-in-out hover:scale-110"
+                    />
+                    <p className="text-lg font-semibold text-white/90">
                       {`${item.Kills.toLocaleString()} Kills`}
+                    </p>
+                  </div>
+                  <div className="flex">
+                    {/* Map and Guild Name */}
+                    <p className="text-xs text-white/70">
+                      {item.GuildName ? `${item.GuildName} - ` : ""}
+                      {mapCodes[Number(item.Map)] || "Unknown Map"}
                     </p>
                   </div>
                 </div>
@@ -187,7 +196,16 @@ const RankingsTable = ({
         ) => (
           <TableRow key={item.ID}>
             <TableCell>{(page - 1) * rowsPerPage + index + 4}</TableCell>
-            <TableCell>{item.Name}</TableCell>
+            <TableCell>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <img
+                  src={getImageBasedOnKills(item.Kills)}
+                  alt="Kill Badge"
+                  style={{ width: 30, height: 30, marginRight: 8 }}
+                />
+                {item.Name}
+              </div>
+            </TableCell>
             <TableCell>{item.Kills.toLocaleString()}</TableCell>
             <TableCell>{item.Level}</TableCell>
             <TableCell>{item.GuildName}</TableCell>
@@ -233,7 +251,7 @@ export default function Rankings() {
   );
 
   return (
-    <div className="p-10 bg-gradient-to-r from-blue-500 via-purple-500 to-violet-500 min-h-screen">
+    <div className="p-10 min-h-screen">
       <h1 className="text-center text-4xl font-bold text-white mb-8 drop-shadow-lg">
         Player Rankings
       </h1>

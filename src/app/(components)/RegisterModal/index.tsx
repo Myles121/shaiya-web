@@ -16,6 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { MailIcon } from "./MailIcon.jsx";
 import { LockIcon } from "./LockIcon.jsx";
+import { useToast } from "@/hooks/use-toast";
 
 // Zod schema for validation
 const registerSchema = z.object({
@@ -35,6 +36,7 @@ type RegisterFormData = z.infer<typeof registerSchema>;
 export default function Register() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
 
   // React Hook Form setup with Zod
   const {
@@ -63,6 +65,10 @@ export default function Register() {
       console.log(responseData);
 
       if (response.ok) {
+        toast({
+          title: "Registration successful",
+          description: "You can now log in both in-game and on the website."
+        });
         onOpenChange(); // Close the modal
         reset(); // Clear the form
       } else {
@@ -141,7 +147,7 @@ export default function Register() {
                     </div>
                   )} */}
                   <ModalFooter>
-                    <Button color="danger" variant="flat" onPress={onClose}>
+                    <Button color="danger" variant="flat" onPress={() => { onClose(); reset(); }}>
                       Close
                     </Button>
                     <Button color="primary" type="submit" disabled={loading}>

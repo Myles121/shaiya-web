@@ -100,7 +100,7 @@ const NavigationBar = () => {
       <NavbarContent>
         <NavbarBrand>
           <AcmeLogo />
-          <p className="font-bold text-inherit">SHAIYA M</p>
+          <p className="font-bold text-inherit text-md">SHAIYA M</p>
         </NavbarBrand>
       </NavbarContent>
 

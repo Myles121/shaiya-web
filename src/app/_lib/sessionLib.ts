@@ -1,4 +1,5 @@
 import { SessionOptions } from "iron-session";
+import path from "path";
 
 export interface loginFormData {
     headers: { [key: string]: string };
@@ -23,7 +24,9 @@ export const sessionOptions: SessionOptions = {
     password: process.env.SESSION_SECRET!,
     cookieName: "shaiya-m-session-best-name",
     cookieOptions: {
-      httpOnly: true,
+    //   httpOnly: true,
       secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
     },
   };

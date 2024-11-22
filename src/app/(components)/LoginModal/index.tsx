@@ -18,6 +18,7 @@ import { MailIcon } from "./MailIcon.jsx";
 import { LockIcon } from "./LockIcon.jsx";
 import { login } from "./actions";
 import { User } from "@app/(components)/LoggedNavBar";
+import { useToast } from "@/hooks/use-toast";
 
 interface LoginModalProps {
   onLoginSuccess: (user: User) => void; // Define the callback type
@@ -27,6 +28,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onLoginSuccess }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [loading, setLoading] = useState(false);
   const [responseData, setResponseData] = useState<string | null>(null);
+  const { toast } = useToast();
 
   const {
     register,
@@ -64,39 +66,44 @@ const LoginModal: React.FC<LoginModalProps> = ({ onLoginSuccess }) => {
       const user: User = res.user; // Ensure that the response matches the `User` type
       onLoginSuccess(user); // Pass the user data to the parent component
     } else if (res.field === "username") {
-      setResponseData(res.message);
-    } else if (res.field === "password") {
-      setResponseData(res.message);
-    } else {
-      setResponseData(res.message || "An error occurred");
-      setTimeout(() => {
-        setResponseData(null);
-      }, 3000);
-      setLoading(false);
-    }
-
-    if (res.field === "username") {
       setError("username", {
         type: "server",
         message: res.message,
       });
+    } else if (res.field === "password") {
+      setError("password", {
+        type: "server",
+        message: res.message,
+      });
     } else {
-      console.error(res.message || "An error occurred.");
+      toast({
+        title: res.field,
+        description: "An error occurred",
+      });
     }
 
     setLoading(false);
   };
 
+  const handleModalClose = (isOpen: boolean) => {
+    if (!isOpen) {
+      reset();
+    }
+    onOpenChange();
+  };
+
   return (
     <>
       <Button onPress={onOpen}>Login</Button>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
+      <Modal
+        isOpen={isOpen}
+        onOpenChange={handleModalClose}
+        placement="top-center"
+      >
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">
-                Register
-              </ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">Log in</ModalHeader>
               <ModalBody>
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <div className="flex flex-col gap-3">
@@ -125,12 +132,20 @@ const LoginModal: React.FC<LoginModalProps> = ({ onLoginSuccess }) => {
                     />
                   </div>
                   {responseData && (
-                    <div className="flex justify-center mt-3 bg-red-600/60 rounded-md">
-                      <p className="p-2">{responseData}</p>
-                    </div>
+                    // <div className="flex justify-center mt-3 bg-red-600/60 rounded-md">
+                    // <p className="p-2">{responseData}</p>
+                    // </div>
+                    <div></div>
                   )}
                   <ModalFooter>
-                    <Button color="danger" variant="flat" onPress={onClose}>
+                    <Button
+                      color="danger"
+                      variant="flat"
+                      onPress={() => {
+                        onClose();
+                        reset();
+                      }}
+                    >
                       Close
                     </Button>
                     <Button color="primary" type="submit" disabled={loading}>
