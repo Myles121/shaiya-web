@@ -52,7 +52,12 @@ const LoginModal: React.FC<LoginModalProps> = ({ onLoginSuccess }) => {
     const res = await response.json();
 
     if (res.field === "success") {
-      await login(data);
+      await login({
+        headers: {
+          "Content-Type": "application/json",
+        },
+        ...data,
+      });
       onOpenChange();
       reset();
       // Assuming `res.user` contains the user data
