@@ -42,7 +42,7 @@ type Action =
       toast: Partial<ToasterToast>
     }
   | {
-      type: "DISMISS_TOASTT"
+      type: "DISMISS_TOAST"
       toastId?: ToasterToast["id"]
     }
   | {
@@ -113,6 +113,7 @@ export const reducer = (state: State, action: Action): State => {
         ),
       }
     }
+
     case "REMOVE_TOAST":
       if (action.toastId === undefined) {
         return {
@@ -124,6 +125,9 @@ export const reducer = (state: State, action: Action): State => {
         ...state,
         toasts: state.toasts.filter((t) => t.id !== action.toastId),
       }
+
+    default:
+      return state // Ensure a return value is provided in case no cases match
   }
 }
 
