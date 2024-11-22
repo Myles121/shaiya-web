@@ -27,7 +27,6 @@ interface LoginModalProps {
 const LoginModal: React.FC<LoginModalProps> = ({ onLoginSuccess }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [loading, setLoading] = useState(false);
-  const [responseData, setResponseData] = useState<string | null>(null);
   const { toast } = useToast();
 
   const {
@@ -131,12 +130,6 @@ const LoginModal: React.FC<LoginModalProps> = ({ onLoginSuccess }) => {
                       errorMessage={errors.password?.message}
                     />
                   </div>
-                  {responseData && (
-                    // <div className="flex justify-center mt-3 bg-red-600/60 rounded-md">
-                    // <p className="p-2">{responseData}</p>
-                    // </div>
-                    <div></div>
-                  )}
                   <ModalFooter>
                     <Button
                       color="danger"

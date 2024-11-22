@@ -122,7 +122,7 @@ const RankingCards = ({ data }: RankingCardProps) => {
                 <div className="flex justify-between items-center w-full">
                   <div className="flex items-center gap-3">
                     {/* Kill Badge and Kill Count */}
-                    <img
+                    <Image
                       src={getImageBasedOnKills(item.Kills)}
                       alt="Kill Badge"
                       className="h-8 w-8 object-contain transform transition-all duration-300 ease-in-out hover:scale-110"
@@ -198,7 +198,7 @@ const RankingsTable = ({
             <TableCell>{(page - 1) * rowsPerPage + index + 4}</TableCell>
             <TableCell>
               <div style={{ display: "flex", alignItems: "center" }}>
-                <img
+                <Image
                   src={getImageBasedOnKills(item.Kills)}
                   alt="Kill Badge"
                   style={{ width: 30, height: 30, marginRight: 8 }}
