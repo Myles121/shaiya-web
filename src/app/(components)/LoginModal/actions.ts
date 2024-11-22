@@ -5,15 +5,13 @@ import { loginFormData } from "@app/_lib/sessionLib";
 
 export async function login(data: loginFormData) {
   const session = await getSession();
-  const vercelBaseUrl = data.headers['x-vercel-base-url'];  // Get the base URL from the headers
-  console.log('Vercel Base URL:', vercelBaseUrl);
 
   const formDataObj = {
     username: data.username,
     password: data.password,
   };
 
-  const response = await fetch(`${vercelBaseUrl}/api/login`, {
+  const response = await fetch(`${process.env.VERCEL_URL}/api/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
