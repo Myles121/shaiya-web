@@ -15,7 +15,9 @@ export async function POST(req) {
         {
           status: 400,
           headers: {
-            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Origin": "*", // Allow cross-origin requests
+            "Access-Control-Allow-Methods": "POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type",
           },
         }
       );
@@ -41,7 +43,9 @@ export async function POST(req) {
         {
           status: 401,
           headers: {
-            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Origin": "*", // Allow cross-origin requests
+            "Access-Control-Allow-Methods": "POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type",
           },
         }
       );
@@ -51,7 +55,15 @@ export async function POST(req) {
 
     if (password === user.Pw) {
       return new Response(
-        JSON.stringify({ field: "success", message: "logged", user: user })
+        JSON.stringify({ field: "success", message: "logged", user: user }),
+        {
+          status: 200,
+          headers: {
+            "Access-Control-Allow-Origin": "*", // Allow cross-origin requests
+            "Access-Control-Allow-Methods": "POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type",
+          },
+        }
       );
     } else {
       return new Response(
@@ -59,7 +71,9 @@ export async function POST(req) {
         {
           status: 401,
           headers: {
-            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Origin": "*", // Allow cross-origin requests
+            "Access-Control-Allow-Methods": "POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type",
           },
         }
       );
@@ -74,7 +88,9 @@ export async function POST(req) {
       {
         status: 500,
         headers: {
-          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Origin": "*", // Allow cross-origin requests
+          "Access-Control-Allow-Methods": "POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type",
         },
       }
     );
