@@ -113,7 +113,7 @@ const NavigationBar = () => {
       </NavbarContent>
 
       <NavbarMenu>
-        <MobileMenu setIsMenuOpen={function (value: React.SetStateAction<boolean>): void {
+        <MobileMenu setIsMenuOpen={function (): void {
           throw new Error("Function not implemented.");
         } } />
       </NavbarMenu>
