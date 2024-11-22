@@ -23,6 +23,10 @@ interface LoginModalProps {
   onLoginSuccess: (user: User) => void; // Define the callback type
 }
 
+function getVercelBaseUrl() {
+  return `${window.location.protocol}//${window.location.host}`;
+}
+
 const LoginModal: React.FC<LoginModalProps> = ({ onLoginSuccess }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [loading, setLoading] = useState(false);
@@ -39,11 +43,13 @@ const LoginModal: React.FC<LoginModalProps> = ({ onLoginSuccess }) => {
   });
 
   const onSubmit = async (data: SignInFormData) => {
+    const apiUrl = getVercelBaseUrl();
     setLoading(true);
-    const response = await fetch("http://localhost:3000/api/login", {
+    const response = await fetch("/api/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        'X-Vercel-Base-Url': apiUrl,
       },
       body: JSON.stringify(data),
       credentials: "include",
@@ -52,7 +58,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onLoginSuccess }) => {
     const res = await response.json();
 
     if (res.field === "success") {
-      await login(data);
+      await login({ ...data, headers: { 'x-vercel-base-url': apiUrl } });
       onOpenChange();
       reset();
       // Assuming `res.user` contains the user data

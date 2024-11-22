@@ -1,6 +1,7 @@
 import { SessionOptions } from "iron-session";
 
 export interface loginFormData {
+    headers: { [key: string]: string };
     username: string,
     password: string
 }
